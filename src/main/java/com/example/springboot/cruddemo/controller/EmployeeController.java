@@ -28,7 +28,7 @@ public class EmployeeController {
     // 1. Endpoint to get all employees: GET /api/employees
     @GetMapping("/employees")
     public List<Employee> getEmployees() {
-        return employeeService.getEmps();
+        return employeeService.findAll();
     }
 
     // 2. Endpoint to get a single employee: GET /api/employees/{employeeId}

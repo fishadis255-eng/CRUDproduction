@@ -1,35 +1,38 @@
 package com.example.springboot.cruddemo.service;
 
-import com.example.springboot.cruddemo.DAO.EmployeeDAO;
 import com.example.springboot.cruddemo.entity.Employee;
+import com.example.springboot.cruddemo.DAO.EmployeeRepository;   // ← Correct repository
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 @Service
 public class EmployeeService {
 
-    private final EmployeeDAO empDao;
+    private final EmployeeRepository employeeRepository;
 
-    public EmployeeService(EmployeeDAO empDao) {
-        this.empDao = empDao;
+    // Constructor Injection
+    public EmployeeService(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
     }
 
-    public List<Employee> getEmps() {
-        return empDao.findAll();
+    public List<Employee> findAll() {
+        return employeeRepository.findAll();
     }
 
-    public Employee findById(int id) {
-        return empDao.findById(id);
+    public Employee findById(Integer id) {
+        return employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found - " + id));
     }
 
-    // MAKE SURE THIS METHOD EXISTS EXACTLY LIKE THIS
     @Transactional
     public Employee save(Employee theEmployee) {
-        return empDao.save(theEmployee); // Calls the DAO to save to the database
+        return employeeRepository.save(theEmployee);
     }
+
     @Transactional
-    public void deleteById(int theId) {
-        empDao.deleteById(theId);
+    public void deleteById(Integer id) {
+        employeeRepository.deleteById(id);
     }
 }
